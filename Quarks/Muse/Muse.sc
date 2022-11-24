@@ -65,29 +65,43 @@ Pmuse : Pattern {
         var xStr = x.asStream;
         var yStr = y.asStream;
         var zStr = z.asStream;
+        var aVal, bVal, cVal, dVal, wVal, xVal, yVal, zVal;
 
-        var theme;
-        var bin_ctr_state, tri_ctr_state, sht_reg_state;
-        var prev_bin_ctr_state = 1, prev_tri_ctr_state = 0, prev_sht_reg_state = 0;
+        var theme, interval;
+        var bin_ctr_state = 1, tri_ctr_state = 0, sht_reg_state = 0;
 
         length.value(inval).do {
-            theme = stateAt.value([w, x, y, z], prev_bin_ctr_state, prev_tri_ctr_state, prev_sht_reg_state);
+            aVal = aStr.next(inval);
+            bVal = bStr.next(inval);
+            cVal = cStr.next(inval);
+            dVal = dStr.next(inval);
+            wVal = wStr.next(inval);
+            xVal = xStr.next(inval);
+            yVal = yStr.next(inval);
+            zVal = zStr.next(inval);
+
+            theme = stateAt.value(
+                [wVal, xVal, yVal, zVal],
+                bin_ctr_state,
+                tri_ctr_state,
+                sht_reg_state
+            );
 
             bin_ctr_state = binaryCounter.next;
-            tri_ctr_state = if(bin_ctr_state.bitAnd(1) == 0) { tripleCounter.next } { prev_tri_ctr_state };
-            sht_reg_state = if(bin_ctr_state.bitAnd(1) == 0) {
-                shiftRegister.next(fourBitsParity.value(theme))
-            } {
-                prev_sht_reg_state
+            if(bin_ctr_state.bitAnd(1) == 0) {
+                tri_ctr_state = tripleCounter.next;
+                sht_reg_state = shiftRegister.next(fourBitsParity.value(theme));
             };
 
-            prev_bin_ctr_state = bin_ctr_state;
-            prev_tri_ctr_state = tri_ctr_state;
-            prev_sht_reg_state = sht_reg_state;
-
-            stateAt.value([a, b, c, d], bin_ctr_state, tri_ctr_state, sht_reg_state).yield;
+            interval = stateAt.value(
+                [aVal, bVal, cVal, dVal],
+                bin_ctr_state,
+                tri_ctr_state,
+                sht_reg_state
+            );
+            interval.yield;
         };
 
-        ^inval;
+        ^inval
     }
 }
