@@ -105,3 +105,19 @@ Pmuse : Pattern {
         ^inval
     }
 }
+
+Pchanged : FilterPattern {
+	embedInStream { |inval|
+		var stream = pattern.asStream;
+		var next, prev = stream.next(inval);
+        inval = true.yield;
+		while {
+			next = stream.next(inval);
+			next.notNil;
+		}{
+            inval = (next - prev).sign.perform('!=', 0).yield;
+			prev = next;
+		}
+		^inval
+	}
+}
