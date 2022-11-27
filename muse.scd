@@ -61,6 +61,3 @@ Pbind(
     \midicmd, Pif(Pchanged(Pkey(\degree)), \noteOn, Rest()),
 ).play;
 )
-
-Pclutch(Pseq([1,1,2,2,2,1]), Pchanged(Pseq([1,1,2,2,2,1]))).asStream.nextN(10);
-Pchanged(Pseq([1,1,2,2,2,1])).asStream.nextN(10);
