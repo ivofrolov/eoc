@@ -1,0 +1,7 @@
+(
+	name: "EOC",
+	summary: "End of Cycle: Music Machines",
+	version: "1.0.0",
+	url: "https://github.com/ivofrolov/eoc",
+	license: "MIT"
+)
